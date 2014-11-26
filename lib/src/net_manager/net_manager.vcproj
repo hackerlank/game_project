@@ -41,6 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="../../../dep/ACE_wrappers"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -60,6 +61,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				OutputFile="$(OutDir)\$(ProjectName)_d.lib"
+				AdditionalLibraryDirectories="../../lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -143,6 +146,10 @@
 	<References>
 	</References>
 	<Files>
+		<File
+			RelativePath=".\Define.h"
+			>
+		</File>
 		<File
 			RelativePath=".\ReadMe.txt"
 			>
