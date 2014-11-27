@@ -19,8 +19,9 @@ public:
 
     //getter setter
     void                add_socket_handler(YLH_Sock_Handler *handler);
+    YLH_Sock_Handler*   get_socket_handler(ACE_HANDLE handle);
     YLH_Sock_Handler*   get_socket_handler(int port);
-    void                del_socket_handler(int port);
+    YLH_Sock_Handler*   get_socket_handler(YLH_Sock_Handler* handler);
     void                del_socket_handler(YLH_Sock_Handler* handler);
 
     
@@ -68,7 +69,7 @@ private:
 
 
     //已连接的socket
-    std::map<int /*port*/, YLH_Sock_Handler*>     m_handler_list;
+    std::map<ACE_HANDLE, YLH_Sock_Handler*>     m_handler_list;
 
     //请求连接配置信息
     std::vector<YLH_Connect_Info>       m_connection_config_list;   //配置信息

@@ -28,34 +28,39 @@ YLH_Server* YLH_Net_Manager::get_owner_server()
     return m_owner_server;
 }
 
-void YLH_Net_Manager::add_socket_handler(YLH_Sock_Handler *handler)
+void YLH_Net_Manager::add_socket_handler(YLH_Sock_Handler *sock_handler)
 {
-    YLH_Sock_Handler* last_handler = get_socket_handler(handler->get_port());
+    if (NULL == sock_handler)
+    {
+        return;
+    }
+
+    YLH_Sock_Handler* last_handler = get_socket_handler(sock_handler);
     if (NULL != last_handler)
     {
         //已存在
     }
 
-    m_handler_list[handler->get_port()] = handler;
+    m_handler_list[sock_handler->get_handle()] = sock_handler;
 }
 
-void YLH_Net_Manager::del_socket_handler(int port)
+void YLH_Net_Manager::del_socket_handler(YLH_Sock_Handler* sock_handler)
 {
-    std::map<int , YLH_Sock_Handler*>::iterator iter = m_handler_list.find(port);
+    if (NULL == sock_handler)
+    {
+        return;
+    }
+
+    std::map<ACE_HANDLE , YLH_Sock_Handler*>::iterator iter = m_handler_list.find(sock_handler->get_handle());
     if (iter != m_handler_list.end())
     {
         m_handler_list.erase(iter);
     }
 }
 
-void YLH_Net_Manager::del_socket_handler(YLH_Sock_Handler* handler)
+YLH_Sock_Handler* YLH_Net_Manager::get_socket_handler(ACE_HANDLE handle)
 {
-    del_socket_handler(handler->get_port());
-}
-
-YLH_Sock_Handler* YLH_Net_Manager::get_socket_handler(int port)
-{
-    std::map<int , YLH_Sock_Handler*>::iterator iter = m_handler_list.find(port);
+    std::map<ACE_HANDLE , YLH_Sock_Handler*>::iterator iter = m_handler_list.find(handle);
     if (iter != m_handler_list.end())
     {
         return iter->second;
@@ -64,18 +69,45 @@ YLH_Sock_Handler* YLH_Net_Manager::get_socket_handler(int port)
     return NULL;
 }
 
+YLH_Sock_Handler* YLH_Net_Manager::get_socket_handler(int port)
+{
+    std::map<ACE_HANDLE , YLH_Sock_Handler*>::iterator iter;
+    for (iter = m_handler_list.begin(); iter != m_handler_list.end(); ++iter)
+    {
+        YLH_Sock_Handler* sock_handler = iter->second;
+        if (NULL == sock_handler)
+        {
+            continue;
+        }
+        if (sock_handler->get_port() == port)
+        {
+            return sock_handler;
+        }
+    }
+
+    return NULL;
+}
+
+YLH_Sock_Handler* YLH_Net_Manager::get_socket_handler(YLH_Sock_Handler* sock_handler)
+{
+    if (NULL == sock_handler)
+    {
+        return NULL;
+    }
+
+    return get_socket_handler(sock_handler->get_handle());
+}
+
 
 void YLH_Net_Manager::open()
 {
-    
-
-
-
+    //定时重连
     ACE_Time_Value send_interval(2, 2*1000);
     get_Reactor()->schedule_timer(this,
         reinterpret_cast<const void*>(CONNECT_SERVER_TIME_ID),
         send_interval, send_interval);
 
+    //打开监听
     m_acceptor->Open_Accept(m_acceptor_info);
 }
 
@@ -148,7 +180,7 @@ ACE_Reactor* YLH_Net_Manager::get_Reactor()
 
 void YLH_Net_Manager::send_test_buff()
 {
-    std::map<int, YLH_Sock_Handler*>::iterator iter;
+    std::map<ACE_HANDLE, YLH_Sock_Handler*>::iterator iter;
     for (iter = m_handler_list.begin(); iter != m_handler_list.end(); ++iter)
     {
         static int kk = 0;
