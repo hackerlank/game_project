@@ -54,6 +54,8 @@ void YLH_Net_Manager::del_socket_handler(YLH_Sock_Handler* sock_handler)
     std::map<ACE_HANDLE , YLH_Sock_Handler*>::iterator iter = m_handler_list.find(sock_handler->get_handle());
     if (iter != m_handler_list.end())
     {
+        delete iter->second;
+        iter->second = NULL;
         m_handler_list.erase(iter);
     }
 }

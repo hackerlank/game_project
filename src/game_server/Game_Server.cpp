@@ -39,12 +39,12 @@ void Game_Server::collect_msg(char* recvbuf, int buff_size)
 
 void Game_Server::add_accept_config()
 {
-    YLH_Acceptor_Info acceptor_info;
-    acceptor_info.set_port(GAME_SERVER_ACCEPT_PORT);
-    get_net_manager()->add_accept_info(acceptor_info);
+
 }
 
 void Game_Server::add_connect_config()
 {
-
+    YLH_Connect_Info connector_info;
+    connector_info.connect_port = (GAME_SERVER_ACCEPT_PORT);
+    get_net_manager()->add_connect_info(connector_info);
 }
