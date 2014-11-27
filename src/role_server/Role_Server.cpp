@@ -22,7 +22,7 @@ int  Role_Server::handle_timeout(const ACE_Time_Value &now, const void *act)
 {
     if (reinterpret_cast<const void *>(ROLE_TIMER_SEND) == act)
     {
-        get_net_manager()->send_test_buff();
+        //get_net_manager()->send_test_buff();
     }
     
     return 0;

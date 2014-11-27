@@ -10,7 +10,7 @@ Game_Server::Game_Server()
 {
     for (int i=0; i < 10; ++i)
     {
-        Sub_Thread *new_thread = new Sub_Thread(get_Reactor());
+        Sub_Thread *new_thread = new Sub_Thread(get_Reactor(), this);
         new_thread->thread_start();
         m_sub_thread_list.push_back(new_thread);
     }

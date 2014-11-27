@@ -196,6 +196,7 @@ void YLH_Net_Manager::send_test_buff()
         oo<<kk<<" "<<std::endl;
         std::string str_buff_1 = oo.str();
         iter->second->peer().send_n(str_buff_1.c_str(), str_buff_1.size());
+        ACE_Log_Msg::instance()->msg(str_buff_1.c_str());
     }
 }
 

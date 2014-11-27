@@ -5,8 +5,13 @@
 #include "ace/Reactor_Notification_Strategy.h"
 #include <iostream>
 #include "ace/Log_Msg.h"
+#include "YLH_Server.h"
+#include "YLH_Net_Manager.h"
 
-Sub_Thread::Sub_Thread(ACE_Reactor* owner_reactor)
+#define SUB_THREAD_TIMER_SEND -100
+
+Sub_Thread::Sub_Thread(ACE_Reactor* owner_reactor, YLH_Server* owner_server)
+:m_owner_server(owner_server)
 {
     ACE_Select_Reactor*   select_reactor = new ACE_Select_Reactor();
     m_self_reactor = new ACE_Reactor(select_reactor);
@@ -18,6 +23,12 @@ Sub_Thread::Sub_Thread(ACE_Reactor* owner_reactor)
     m_notify->reactor(m_self_reactor);
     msg_queue_->notification_strategy(m_notify);
 
+
+    //testcode sendbuff
+    ACE_Time_Value send_interval(1, 1*1000);
+    m_self_reactor->schedule_timer(this,
+        reinterpret_cast<const void*>(SUB_THREAD_TIMER_SEND),
+        send_interval, send_interval);
     
 }
 
@@ -87,4 +98,14 @@ int Sub_Thread::handle_output(ACE_HANDLE fd /* = ACE_INVALID_HANDLE */)
     printf("Sub_Thread::handle_output  thread_id[%d]\n", GetCurrentThreadId() );
 
     return 1;
+}
+
+int Sub_Thread::handle_timeout (const ACE_Time_Value &now, const void *act)
+{
+    if (reinterpret_cast<const void *>(SUB_THREAD_TIMER_SEND) == act)
+    {
+        m_owner_server->get_net_manager()->send_test_buff();
+    }
+
+    return 0;
 }
