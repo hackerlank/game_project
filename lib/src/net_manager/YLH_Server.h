@@ -28,25 +28,39 @@ class YLH_Server : public ACE_Event_Handler
 public:
     YLH_Server();
 
+    void init();
+    void run();
+    void close();
+
+    ACE_Reactor* get_Reactor();
+    YLH_Net_Manager* get_net_manager();
+
+public:
+    //处理消息
+    virtual void collect_msg(char* recvbuf, int buff_size) = 0;
+
+    //读配置
+    virtual void add_accept_config() = 0;
+    virtual void add_connect_config() = 0;
+
+private:
     void Load_File();
 
     void Init();
 
-    int Open_Accept(YLH_Acceptor_Info& acceptor_info);
+    //int Open_Accept(YLH_Acceptor_Info& acceptor_info);
 
 
     //int Open_Connect(YLH_Connect_Info& connect_info);
 
     void Run();
 
-    ACE_Reactor* get_Reactor();
-    YLH_Net_Manager* get_net_manager();
-
-    //处理消息
-    virtual void collect_msg(char* recvbuf, int buff_size) = 0;
 
 
-    void del_handler(YLH_Sock_Handler* handler);
+
+
+
+    //void del_handler(YLH_Sock_Handler* handler);
 private:
     YLH_Net_Manager*    m_Net_Manager;  //网络
     YLH_Server_Info*    m_Server_Info;  //服务器描述信息

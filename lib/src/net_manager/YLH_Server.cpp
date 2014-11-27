@@ -8,6 +8,23 @@ YLH_Server::YLH_Server()
     m_Net_Manager = new YLH_Net_Manager(this);
 }
 
+void YLH_Server::init()
+{
+    add_accept_config();
+    add_connect_config();
+    m_Net_Manager->open();
+}
+
+void YLH_Server::run()
+{
+    m_Net_Manager->run();
+}
+
+void YLH_Server::close()
+{
+
+}
+
 void YLH_Server::Load_File()
 {
 
@@ -17,10 +34,10 @@ void YLH_Server::Init()
 {
 }
 
-int YLH_Server::Open_Accept(YLH_Acceptor_Info& acceptor_info)
-{
-    return m_Net_Manager->Open_Accept(acceptor_info);
-}
+//int YLH_Server::Open_Accept(YLH_Acceptor_Info& acceptor_info)
+//{
+//    return m_Net_Manager->Open_Accept(acceptor_info);
+//}
 
 //int YLH_Server::Open_Connect(YLH_Connect_Info& connect_info)
 //{
@@ -42,7 +59,7 @@ YLH_Net_Manager* YLH_Server::get_net_manager()
     return m_Net_Manager;
 }
 
-void YLH_Server::del_handler(YLH_Sock_Handler* handler)
-{
-    m_Net_Manager->del_handler(handler);
-}
+//void YLH_Server::del_handler(YLH_Sock_Handler* handler)
+//{
+//    m_Net_Manager->del_handler(handler);
+//}

@@ -1,9 +1,4 @@
 
-
-
-//
-
-
 #ifndef _YLH_SOCK_HANDLER_H
 #define _YLH_SOCK_HANDLER_H
 
@@ -12,6 +7,7 @@
 #include "ace/SOCK_Stream.h"
 #include "ace/Event_Handler.h"
 
+class YLH_Net_Manager;
 class YLH_Server;
 
 class YLH_Sock_Handler : public ACE_Svc_Handler<ACE_SOCK_STREAM, ACE_MT_SYNCH>
@@ -20,35 +16,26 @@ class YLH_Sock_Handler : public ACE_Svc_Handler<ACE_SOCK_STREAM, ACE_MT_SYNCH>
 
 public:
     YLH_Sock_Handler();
-    void set_owner_sever(YLH_Server* owner_server);
+    virtual ~YLH_Sock_Handler();
 
+    //getter setter
+    YLH_Server*         get_owner_server(); //用于 调用collect_msg
+    void                set_owner_net_manager(YLH_Net_Manager* owner_net_manager);
+    YLH_Net_Manager*    get_owner_net_manager();
+    void                set_port(int port);
+    int                 get_port();
+
+    //virtual function
     virtual int open (void * = 0);
-
     virtual int handle_input(ACE_HANDLE fd /* = ACE_INVALID_HANDLE */);
-
-    virtual int handle_output(ACE_HANDLE fd /* = ACE_INVALID_HANDLE */);
-
     virtual int handle_close (ACE_HANDLE = ACE_INVALID_HANDLE, ACE_Reactor_Mask = ACE_Event_Handler::ALL_EVENTS_MASK);
 
-    virtual int handle_timeout (const ACE_Time_Value &time, const void *);
+    
 
-    virtual int handle_signal (int signum, siginfo_t * = 0, ucontext_t * = 0);
-
-    void set_timer(int second);
-
-    void set_buff(std::string send_buff) { m_send_buff = send_buff; }
-
-    void set_port(int port);
-    int  get_port();
 
 private:
-    //YLH_Sock_Handler();
-    std::string m_send_buff;
-
-    YLH_Server*     m_owner_server;
-    int             m_port;
+    YLH_Net_Manager*    m_owner_net_manager;
+    int                 m_port;
 };
-
-
 
 #endif  //_YLH_SOCK_HANDLER_H
