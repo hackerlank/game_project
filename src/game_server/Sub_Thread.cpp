@@ -4,6 +4,7 @@
 #include "ace/Select_Reactor.h"
 #include "ace/Reactor_Notification_Strategy.h"
 #include <iostream>
+#include "ace/Log_Msg.h"
 
 Sub_Thread::Sub_Thread(ACE_Reactor* owner_reactor)
 {
@@ -77,7 +78,8 @@ void Sub_Thread::collect_msg(ACE_Message_Block* message)
     }
 
     std::string str(tmp_data_block->base());
-    std::cout<<"Sub_Thread::collect_msg msg[ "<<std::endl<<str<<std::endl<<" ] "<<std::endl;
+
+    ACE_Log_Msg::instance()->msg(/* LM_ERROR, ERROR_PREFIX, "%s\n", */str.c_str());
 }
 
 int Sub_Thread::handle_output(ACE_HANDLE fd /* = ACE_INVALID_HANDLE */)
