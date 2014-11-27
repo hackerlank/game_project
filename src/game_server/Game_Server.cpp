@@ -4,6 +4,7 @@
 #include "ace/Reactor.h"
 #include "ace/Select_Reactor.h"
 #include "ace/Reactor_Notification_Strategy.h"
+#include "YLH_Net_Manager.h"
 
 Game_Server::Game_Server()
 {
@@ -34,4 +35,16 @@ void Game_Server::collect_msg(char* recvbuf, int buff_size)
         (*iter)->putq(msg_block, NULL);
 
     }
+}
+
+void Game_Server::add_accept_config()
+{
+    YLH_Acceptor_Info acceptor_info;
+    acceptor_info.set_port(GAME_SERVER_ACCEPT_PORT);
+    get_net_manager()->add_accept_info(acceptor_info);
+}
+
+void Game_Server::add_connect_config()
+{
+
 }

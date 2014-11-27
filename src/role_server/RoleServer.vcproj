@@ -19,7 +19,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="../../bin/server/role_server"
-			IntermediateDirectory="../../out"
+			IntermediateDirectory="../../out/role_server"
 			ConfigurationType="1"
 			CharacterSet="1"
 			>

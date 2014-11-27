@@ -1,8 +1,9 @@
 #include "Role_Server.h"
 #include "ace/Time_Value.h"
 #include "ace/Reactor.h"
+#include "YLH_Net_Manager.h"
 
-#define  TIMER_SEND -1
+#define  ROLE_TIMER_SEND -100
 
 Role_Server::Role_Server()
 {
@@ -11,21 +12,17 @@ Role_Server::Role_Server()
 
 void Role_Server::open_server()
 {
-    //ACE_Time_Value send_interval(0, 5*1000);
-    //get_Reactor()->schedule_timer(this,
-    //    reinterpret_cast<const void*>(TIMER_SEND),
-    //    send_interval, send_interval);
+    ACE_Time_Value send_interval(0, 5*1000);
+    get_Reactor()->schedule_timer(this,
+        reinterpret_cast<const void*>(ROLE_TIMER_SEND),
+        send_interval, send_interval);
 }
 
 int  Role_Server::handle_timeout(const ACE_Time_Value &now, const void *act)
 {
-    if (reinterpret_cast<const void *>(TIMER_SEND) == act)
+    if (reinterpret_cast<const void *>(ROLE_TIMER_SEND) == act)
     {
-        int kk = 0;
-        /*if(now.sec() < get_activity_start_sec())
-        {
-            send_notice(SPECIAL_PEOPEN_NOTICE);
-        }*/
+        get_net_manager()->send_test_buff();
     }
     
     return 0;
@@ -33,5 +30,19 @@ int  Role_Server::handle_timeout(const ACE_Time_Value &now, const void *act)
 
 void Role_Server::collect_msg(char* recvbuf, int buff_size)
 {
+    int kk = 0; 
+    kk++;
+}
 
+
+void Role_Server::add_accept_config()
+{
+
+}
+
+void Role_Server::add_connect_config()
+{
+    YLH_Connect_Info connector_info;
+    connector_info.connect_port = (GAME_SERVER_ACCEPT_PORT);
+    get_net_manager()->add_connect_info(connector_info);
 }

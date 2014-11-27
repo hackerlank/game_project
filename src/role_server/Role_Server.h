@@ -16,6 +16,8 @@ public:
     void open_server();
 
     virtual void collect_msg(char* recvbuf, int buff_size);
+    virtual void add_accept_config();
+    virtual void add_connect_config();
     
     virtual int  handle_timeout(const ACE_Time_Value &now, const void *act);
 
