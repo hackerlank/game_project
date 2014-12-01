@@ -12,17 +12,32 @@ void Encoder::encode(const _TYPE& data)
 template<class _TYPE>
 void Encoder::encode(std::vector<_TYPE>& data)
 {
-    encode(data.size());
+    const int vec_size = data.size();
+    encode(vec_size);
 
-    const std::vector<_TYPE>::iterator iter;
-    for (iter = data.begin(); iter != data.end(); ++iter)
+    for (int i=0; i<vec_size; ++i)
     {
-        encode(*iter);
+        encode(data[i]);
     }
 }
 
-template<class _TYPE>
-void Encoder::encode(std::string& data)
-{
+//template<class _TYPE>
+//void Encoder::encode(std::string& data)
+//{
+//    encode(STRING_CODE, sizeof(STRING_CODE));
+//    
+//    const int buff_size = data.size();
+//    encode(buff_size);
+//
+//    for (int i=0; i<buff_size; ++i)
+//    {
+//        encode(data[i], sizeof(data[i]));
+//    }
+//
+//}
 
-}
+//template<class _TYPE>
+//void Encoder::encode(const char* data, int len)
+//{
+//    copy(data, len);
+//}

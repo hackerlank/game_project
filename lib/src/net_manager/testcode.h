@@ -7,8 +7,21 @@
 #include "Decoder.h"
 
 
+
+struct  pack_struct
+{
+    int kk;
+    int jj;
+
+    pack_struct();
+    void encode(Encoder& encoder);
+    void decode(Decoder& decoder);
+};
+
 struct TestPacket
 {
+    std::vector<pack_struct> vec_id;
+    std::string str;
     int     id;
     int     entity_id;
     long    u_id;

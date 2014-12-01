@@ -8,6 +8,7 @@
 #include <vector>
 #include "ace/message_block.h"
 
+#define STRING_CODE "S"
 
 
 class Encoder : public ACE_Message_Block
@@ -23,8 +24,12 @@ public:
     template<class _TYPE>
     void encode(std::vector<_TYPE>& data);
 
-    template<class _TYPE>
-    void encode(std::string& data);
+    //template<class _TYPE>
+    //void encode(std::string& data);
+
+//private:
+//    template<class _TYPE>
+//    void encode(const char* data, int len);
 };
 
 
